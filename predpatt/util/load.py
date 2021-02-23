@@ -28,14 +28,22 @@ def load_comm(filename, tool='ud converted ptb trees using pyStanfordDependencie
                     yield sec.label, get_udparse(sent, tool)
 
 
-def load_conllu(filename):
+def load_conllu(filename_or_content):
     "Load CoNLLu style files (e.g., the Universal Dependencies treebank)."
     sent_num = 1
-    if os.path.isfile(filename):
-        with codecs.open(filename, encoding='utf-8') as f:
-            content = f.read().strip()
-    else:
-        content = filename.strip()
+    try:
+        if os.path.isfile(filename_or_content):
+            with codecs.open(filename_or_content, encoding='utf-8') as f:
+                content = f.read().strip()
+        else:
+            content = filename_or_content.strip()
+    except ValueError:
+        # work around an issue on windows: `os.path.isfile` will call `os.stat`,
+        # which throws a ValueError if the "filename" is too long. Possibly
+        # a python bug in that this could be caught in os.path.isfile? Though
+        # I found some related issues where discussion suggests it was deemed
+        # not a bug.
+        content = filename_or_content.strip()
 
     for block in content.split('\n\n'):
         block = block.strip()
