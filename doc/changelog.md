@@ -1,3 +1,7 @@
+# Version 1.0.1
+
+ * Fix for using file content arguments to load_conllu on Windows.
+
 # Version 1.0.0
 
  * 2019 version; before this PredPatt was not formally versioned.
