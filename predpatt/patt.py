@@ -32,7 +32,7 @@ def gov_looks_like_predicate(e, ud):
         return True
     return e.rel in {ud.nsubj, ud.nsubjpass, ud.csubj, ud.csubjpass,
                      ud.nsubjcop, ud.dobj, ud.iobj,
-                     ud.ccomp, ud.xcomp, ud.advcl}
+                     ud.ccomp, ud.xcomp, ud.xcompds, ud.advcl}
 
 
 def argument_names(args):
@@ -129,8 +129,10 @@ class Argument(object):
         return self.share
 
     def isclausal(self):
-        return self.root.gov_rel in {self.ud.ccomp, self.ud.csubj,
-                                     self.ud.csubjpass, self.ud.xcomp}
+        return self.root.gov_rel in {
+            self.ud.ccomp, self.ud.csubj,
+            self.ud.csubjpass, self.ud.xcomp, self.ud.xcompds
+        }
 
     def phrase(self):
         return ' '.join(x.text for x in self.tokens)
@@ -256,7 +258,7 @@ class Predicate(object):
         for i, y in enumerate(sort_by_position(self.tokens + args)):
             if isinstance(y, Argument):
                 ret.append(name[y])
-                if (self.root.gov_rel == self.ud.xcomp and
+                if (self.root.gov_rel in {self.ud.xcomp, self.ud.xcompds} and
                     self.root.tag not in {postag.VERB, postag.ADJ} and
                     i == 0):
                     ret.append(C('is/are', 'yellow'))
@@ -484,7 +486,7 @@ class PredPatt(object):
                 if e.rel in {self.ud.advcl, self.ud.acl, self.ud.aclrelcl}:
                     nominate(e.dep, R.b())
 
-            if e.rel == self.ud.xcomp:
+            if e.rel in {self.ud.xcomp, self.ud.xcompds}:
                 # Dependent of an xcomp is a predicate
                 nominate(e.dep, R.a2())
 
@@ -500,7 +502,7 @@ class PredPatt(object):
                     #                    gov ------------ ccomp --------- dep
                     #
                     pass
-                elif e.gov.gov_rel == self.ud.xcomp:
+                elif e.gov.gov_rel in {self.ud.xcomp, self.ud.xcompds}:
                     # TODO: I don't think we need this case.
                     if e.gov.gov is not None and not e.gov.gov.hard_to_find_arguments():
                         nominate(e.gov, R.c(e))
@@ -570,7 +572,7 @@ class PredPatt(object):
             if e.rel in {self.ud.ccomp, self.ud.csubj, self.ud.csubjpass}:
                 arguments.append(Argument(e.dep, self.ud, [R.k()]))
 
-            if self.options.cut and e.rel == self.ud.xcomp:
+            if self.options.cut and e.rel in {self.ud.xcomp, self.ud.xcompds}:
                 arguments.append(Argument(e.dep, self.ud, [R.k()]))
 
         if predicate.type == AMOD:
@@ -605,7 +607,8 @@ class PredPatt(object):
             # this condition check must be in front of the following one.
             pred.rules.append(R.p1())
             return False
-        if arg.root.gov == pred.root or arg.root.gov.gov_rel == self.ud.xcomp:
+        if (arg.root.gov == pred.root or
+            arg.root.gov.gov_rel in {self.ud.xcomp, self.ud.xcompds}):
             # keep argument directly depending on pred root token,
             # except argument is the dependent of 'xcomp' rel.
             return True
@@ -690,7 +693,7 @@ class PredPatt(object):
             # cut == False:
             #    (They, start firing)
             #    (They, start shooting)
-            if p.root.gov.gov_rel == self.ud.xcomp:
+            if p.root.gov.gov_rel in {self.ud.xcomp, self.ud.xcompds}:
                 g = self._get_top_xcomp(p)
                 if g is not None:
                     for y in g.tokens:
@@ -723,7 +726,7 @@ class PredPatt(object):
                   "reproach", "reproaches", "reproached", "reproaching"]
 
         for p in list(events):
-            if p.root.gov_rel == self.ud.xcomp:
+            if p.root.gov_rel in {self.ud.xcomp, self.ud.xcompds}:
                 if not self.options.cut:
                     # Merge the arguments of xcomp to its gov. (Unlike ccomp, an open
                     # clausal complement (xcomp) shares its arguments with its gov.)
@@ -800,7 +803,7 @@ class PredPatt(object):
                         p.arguments.append(Argument(g.root.gov, self.ud, [R.p()]))
 
         for p in sort_by_position(events):
-            if p.root.gov_rel == self.ud.xcomp:
+            if p.root.gov_rel in {self.ud.xcomp, self.ud.xcompds}:
                 if self.options.cut:
                     for g in self.parents(p):
                         # Subject of an xcomp is most likely to come from the
@@ -929,7 +932,7 @@ class PredPatt(object):
             pred.rules.append(R.n4(e.dep))
             return False
 
-        if (e.gov == pred.root or e.gov.gov_rel == self.ud.xcomp) and e.rel in {self.ud.cc, self.ud.conj}:
+        if (e.gov == pred.root or e.gov.gov_rel in {self.ud.xcomp, self.ud.xcompds}) and e.rel in {self.ud.cc, self.ud.conj}:
             # pred token shouldn't take conjuncts of pred
             # root token or xcomp's dependent.
             pred.rules.append(R.n5(e.dep))
@@ -1137,7 +1140,7 @@ class PredPatt(object):
         governors return current predicate.
         """
         c = predicate.root.gov
-        while c is not None and c.gov_rel == self.ud.xcomp and c in self.event_dict:
+        while c is not None and c.gov_rel in {self.ud.xcomp, self.ud.xcompds} and c in self.event_dict:
             c = c.gov
         return self.event_dict.get(c)
 

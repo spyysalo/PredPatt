@@ -50,7 +50,7 @@ def sort_by_position(x):
 
 def is_dep_of_pred(t, ud=dep_v1):
     if t.gov_rel in {ud.nsubj, ud.nsubjpass, ud.dobj, ud.iobj,
-                     ud.csubj, ud.csubjpass, ud.ccomp, ud.xcomp,
+                     ud.csubj, ud.csubjpass, ud.ccomp, ud.xcomp, ud.xcompds,
                      ud.nmod, ud.advcl, ud.advmod, ud.neg}:
         return True
 

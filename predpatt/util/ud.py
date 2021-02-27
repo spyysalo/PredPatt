@@ -90,6 +90,7 @@ class dep_v1(object):
     # clausal complement
     ccomp = "ccomp"
     xcomp = "xcomp"
+    xcompds = "xcomp:ds"
 
     # relative clause
     advcl = "advcl"
@@ -189,6 +190,7 @@ class dep_v2(object):
     # clausal complement
     ccomp = "ccomp"
     xcomp = "xcomp"
+    xcompds = "xcomp:ds"
 
     # relative clause
     advcl = "advcl"
