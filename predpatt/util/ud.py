@@ -63,6 +63,7 @@ class dep_v1(object):
     nmod_poss = "nmod:poss"
     nmod_tmod = "nmod:tmod"
     nmod_npmod = "nmod:npmod"
+    nmod_gobj = "nmod:gobj"
     obl = "nmod"
     obl_npmod = "nmod:npmod"
 
@@ -104,12 +105,12 @@ class dep_v1(object):
 
     OBJ = {dobj, iobj}
 
-    NMODS = {nmod, obl, nmod_npmod, nmod_tmod}
+    NMODS = {nmod, obl, nmod_npmod, nmod_tmod, nmod_gobj}
 
     ADJ_LIKE_MODS = {amod, appos, acl, aclrelcl}
 
-    ARG_LIKE = {nmod, obl, nmod_npmod, nmod_tmod, nsubj, csubj, csubjpass,
-                dobj, iobj}
+    ARG_LIKE = {nmod, obl, nmod_npmod, nmod_tmod, nmod_gobj, nsubj, csubj,
+                csubjpass, dobj, iobj}
 
     # trivial symbols to be stripped out
     TRIVIALS = {mark, cc, punct}
@@ -163,6 +164,7 @@ class dep_v2(object):
     nmod_poss = "nmod:poss"
     nmod_tmod = "nmod:tmod"
     nmod_npmod = "nmod:npmod"
+    nmod_gobj = "nmod:gobj"
     obl = "obl"
     obl_npmod = "obl:npmod"
 
@@ -204,12 +206,12 @@ class dep_v2(object):
 
     OBJ = {dobj, iobj}
 
-    NMODS = {nmod, obl, nmod_npmod, nmod_tmod}
+    NMODS = {nmod, obl, nmod_npmod, nmod_tmod, nmod_gobj}
 
     ADJ_LIKE_MODS = {amod, appos, acl, aclrelcl}
 
-    ARG_LIKE = {nmod, obl, nmod_npmod, nmod_tmod, nsubj, csubj, csubjpass,
-                dobj, iobj}
+    ARG_LIKE = {nmod, obl, nmod_npmod, nmod_tmod, nmod_gobj, nsubj, csubj,
+                csubjpass, dobj, iobj}
 
     # trivial symbols to be stripped out
     TRIVIALS = {mark, cc, punct}
