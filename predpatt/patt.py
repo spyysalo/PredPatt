@@ -31,7 +31,7 @@ def gov_looks_like_predicate(e, ud):
             ud.nmod, ud.nmod_npmod, ud.obl, ud.obl_npmod}:
         return True
     return e.rel in {ud.nsubj, ud.nsubjpass, ud.csubj, ud.csubjpass,
-                     ud.dobj, ud.iobj,
+                     ud.nsubjcop, ud.dobj, ud.iobj,
                      ud.ccomp, ud.xcomp, ud.advcl}
 
 
@@ -537,7 +537,8 @@ class PredPatt(object):
         for e in predicate.root.dependents:
 
             # Most basic arguments
-            if e.rel in {self.ud.nsubj, self.ud.nsubjpass, self.ud.dobj, self.ud.iobj}:
+            if e.rel in {self.ud.nsubj, self.ud.nsubjpass, self.ud.nsubjcop,
+                         self.ud.dobj, self.ud.iobj}:
                 arguments.append(Argument(e.dep, self.ud, [R.g1(e)]))
 
             # Add 'nmod' deps as long as the predicate type amod.

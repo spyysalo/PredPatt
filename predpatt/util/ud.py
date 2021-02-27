@@ -36,6 +36,7 @@ class dep_v1(object):
     # subj relations
     nsubj = "nsubj"
     nsubjpass = "nsubjpass"
+    nsubjcop = "nsubj:cop"
     csubj = "csubj"
     csubjpass = "csubjpass"
 
@@ -134,6 +135,7 @@ class dep_v2(object):
     # subj relations
     nsubj = "nsubj"
     nsubjpass = "nsubj:pass"
+    nsubjcop = "nsubj:cop"
     csubj = "csubj"
     csubjpass = "csubj:pass"
 
