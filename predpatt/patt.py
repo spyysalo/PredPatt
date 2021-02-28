@@ -24,6 +24,10 @@ no_color = lambda x,_: x
 
 (NORMAL, POSS, APPOS, AMOD) = ("normal", "poss", "appos", "amod")
 
+RELATIVE_PRONOUNS = {
+    'that', 'which', 'who',    # English
+    'joka', 'mikä', 'kuka',    # Finnish
+}
 
 def gov_looks_like_predicate(e, ud):
     # if e.gov "looks like" a predicate because it has potential arguments
@@ -427,7 +431,8 @@ class PredPatt(object):
             for p in self.instances:
                 # TODO: this should probably live with other argument filter logic.
                 if any(isinstance(r, R.pred_resolve_relcl) for r in p.rules):
-                    new = [a for a in p.arguments if a.phrase() not in {'that', 'which', 'who'}]
+                    new = [a for a in p.arguments
+                           if a.phrase() not in RELATIVE_PRONOUNS]
                     if new != p.arguments:
                         p.arguments = new
                         p.rules.append(R.en_relcl_dummy_arg_filter())
